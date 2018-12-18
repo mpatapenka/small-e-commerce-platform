@@ -35,6 +35,7 @@ dependencies {
 
     compileOnly group: 'org.projectlombok', name: 'lombok'
 
+    annotationProcessor group: 'org.projectlombok', name: 'lombok'
     annotationProcessor group: 'org.springframework.boot', name: 'spring-boot-configuration-processor'
 
     developmentOnly group: 'org.springframework.boot', name: 'spring-boot-devtools'
