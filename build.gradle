@@ -1,0 +1,58 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot'
+    id 'io.spring.dependency-management'
+
+    id 'idea'
+}
+
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+configurations {
+    developmentOnly
+    runtimeClasspath {
+        extendsFrom developmentOnly
+    }
+}
+
+dependencies {
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-hateoas'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail'
+    implementation group: 'org.slf4j', name: 'slf4j-api'
+    implementation group: 'com.google.guava', name: 'guava', version: property('guava.version')
+    implementation group: 'com.h2database', name: 'h2'
+
+    testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
+
+    compileOnly group: 'org.projectlombok', name: 'lombok'
+
+    annotationProcessor group: 'org.springframework.boot', name: 'spring-boot-configuration-processor'
+
+    developmentOnly group: 'org.springframework.boot', name: 'spring-boot-devtools'
+}
+
+bootJar {
+    baseName = 'ssp-app'
+}
+
+wrapper {
+    gradleVersion = '5.0'
+    distributionType = Wrapper.DistributionType.ALL
+}
+
+// Tell idea to output to build/classes/main instead of /out/
+idea {
+    module {
+        outputDir file('build/classes/main')
+        testOutputDir file('build/classes/test')
+    }
+}
