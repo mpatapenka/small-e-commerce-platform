@@ -20,17 +20,19 @@ public class SspProperties {
     /** Email order confirmation will be send to this email list. */
     @Email
     private List<String> confirmationEmails = Lists.newArrayList();
+
     /** Root directory to put all loaded images. */
     @NotEmpty
     private String imageStorageLocation;
-    /** Price subfolder for different types of prices */
+
+    /** Price subfolder for different types of prices. */
     private DeliveryPrice deliveryPrices = new DeliveryPrice();
 
     @Getter
     @Setter
     public static class DeliveryPrice {
-        /** Cost of delivery. */
+        /** Cash on delivery. */
         @NotNull
-        private BigDecimal costOfDelivery;
+        private BigDecimal cashOnDelivery;
     }
 }

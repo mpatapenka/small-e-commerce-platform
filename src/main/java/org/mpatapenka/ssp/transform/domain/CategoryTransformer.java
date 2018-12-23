@@ -21,6 +21,7 @@ public class CategoryTransformer extends NullSafeTransformer<CategoryEntity, Cat
         category.setId(categoryEntity.getId());
         category.setPriority(categoryEntity.getPriority());
         category.setName(categoryEntity.getName());
+        category.setArchived(categoryEntity.isArchived());
         category.setIcon(imageTransformer.forward(categoryEntity.getIcon()));
         return category;
     }
@@ -31,6 +32,7 @@ public class CategoryTransformer extends NullSafeTransformer<CategoryEntity, Cat
         categoryEntity.setId(category.getId());
         categoryEntity.setPriority(category.getPriority());
         categoryEntity.setName(category.getName());
+        categoryEntity.setArchived(category.isArchived());
         categoryEntity.setIcon(imageTransformer.backward(category.getIcon()));
         return categoryEntity;
     }

@@ -4,10 +4,11 @@ import org.mpatapenka.ssp.entity.ImageEntity;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
+import java.util.Collection;
 
 public interface ImageService {
-    Resource loadAsResource(String path);
-    List<ImageEntity> uploadImages(List<MultipartFile> imageFiles);
-    void removeImages(Iterable<ImageEntity> imageEntities);
+    Resource loadAsResource(long id);
+    ImageEntity store(MultipartFile image);
+    Collection<ImageEntity> store(MultipartFile[] images);
+    boolean remove(Iterable<ImageEntity> images);
 }

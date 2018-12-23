@@ -1,10 +1,7 @@
 package org.mpatapenka.ssp.entity;
 
 import com.google.common.collect.Sets;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -15,10 +12,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import java.util.Set;
 
-@Getter
-@Setter
-@EqualsAndHashCode
-@ToString
+@Data
 @Entity
 @Table(name = "_SIZE")
 public class SizeEntity {
@@ -27,7 +21,7 @@ public class SizeEntity {
     private Long id;
     private Integer numeric;
     private String symbolic;
-    private Boolean archived;
+    private boolean archived;
 
     @ManyToMany(cascade = CascadeType.ALL)
     private Set<CategoryEntity> categories = Sets.newHashSet();

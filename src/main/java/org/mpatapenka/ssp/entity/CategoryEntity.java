@@ -1,9 +1,6 @@
 package org.mpatapenka.ssp.entity;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -13,10 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-@Getter
-@Setter
-@EqualsAndHashCode
-@ToString
+@Data
 @Entity
 @Table(name = "_CATEGORY")
 public class CategoryEntity {
@@ -25,6 +19,7 @@ public class CategoryEntity {
     private Long id;
     private Integer priority;
     private String name;
+    private boolean archived;
 
     @OneToOne(cascade = CascadeType.ALL)
     private ImageEntity icon;

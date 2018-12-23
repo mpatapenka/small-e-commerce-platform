@@ -64,6 +64,7 @@ public class CategoryServiceImpl implements CategoryService {
         entity.setName(builtInEntity.getName());
         entity.setPriority(builtInEntity.getPriority());
         entity.setIcon(builtInEntity.getIcon());
+        entity.setArchived(builtInEntity.isArchived());
     }
 
     @Override

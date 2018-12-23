@@ -1,22 +1,16 @@
 package org.mpatapenka.ssp.domain;
 
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-import org.springframework.hateoas.ResourceSupport;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = false)
-@ToString
-public class Category extends ResourceSupport {
+public class Category {
     private Long id;
     private Integer priority;
     private String name;
+    private boolean archived;
     private Image icon;
 }

@@ -1,21 +1,15 @@
 package org.mpatapenka.ssp.domain;
 
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-import org.springframework.hateoas.ResourceSupport;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = false)
-@ToString
-public class Size extends ResourceSupport {
+public class Size {
     private Long id;
     private Integer numeric;
     private String symbolic;
+    private boolean archived;
 }
