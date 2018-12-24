@@ -5,7 +5,7 @@ import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
 import org.mpatapenka.ssp.domain.Category;
 import org.mpatapenka.ssp.entity.CategoryEntity;
-import org.mpatapenka.ssp.repository.IdRepository;
+import org.mpatapenka.ssp.repository.CategoryRepository;
 import org.mpatapenka.ssp.service.CategoryService;
 import org.mpatapenka.ssp.transform.Transformer;
 import org.springframework.stereotype.Service;
@@ -21,7 +21,7 @@ import java.util.stream.StreamSupport;
 @Service
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
-    private final IdRepository<CategoryEntity> categoryRepository;
+    private final CategoryRepository categoryRepository;
     private final Transformer<CategoryEntity, Category> categoryTransformer;
 
     @Override

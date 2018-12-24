@@ -12,7 +12,7 @@ import javax.persistence.Table;
 
 @Data
 @Entity
-@Table(name = "_CATEGORY")
+@Table(name = "_category")
 public class CategoryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

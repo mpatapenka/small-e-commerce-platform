@@ -15,7 +15,7 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "_PRODUCT_ITEM")
+@Table(name = "_product_item")
 public class ProductItemEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

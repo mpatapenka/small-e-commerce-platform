@@ -14,7 +14,7 @@ import java.util.Set;
 
 @Data
 @Entity
-@Table(name = "_SIZE")
+@Table(name = "_size")
 public class SizeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

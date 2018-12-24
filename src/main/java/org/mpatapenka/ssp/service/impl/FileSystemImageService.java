@@ -6,7 +6,7 @@ import org.mpatapenka.ssp.SspProperties;
 import org.mpatapenka.ssp.entity.ImageEntity;
 import org.mpatapenka.ssp.exception.ImageNotFoundException;
 import org.mpatapenka.ssp.exception.ServiceException;
-import org.mpatapenka.ssp.repository.IdRepository;
+import org.mpatapenka.ssp.repository.ImageRepository;
 import org.mpatapenka.ssp.service.ImageService;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -29,15 +29,14 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Slf4j
 @Service
 public class FileSystemImageService implements ImageService {
     private final Path storageLocation;
-    private final IdRepository<ImageEntity> imageRepository;
+    private final ImageRepository imageRepository;
 
-    public FileSystemImageService(SspProperties props, IdRepository<ImageEntity> imageRepository) {
+    public FileSystemImageService(SspProperties props, ImageRepository imageRepository) {
         this.storageLocation = Paths.get(props.getImageStorageLocation()).toAbsolutePath().normalize();
         this.imageRepository = imageRepository;
 

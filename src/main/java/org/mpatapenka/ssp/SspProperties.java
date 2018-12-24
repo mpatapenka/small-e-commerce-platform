@@ -18,7 +18,7 @@ import java.util.List;
 @ConfigurationProperties("ssp")
 public class SspProperties {
     /** Email order confirmation will be send to this email list. */
-    @Email
+//    @Email
     private List<String> confirmationEmails = Lists.newArrayList();
 
     /** Root directory to put all loaded images. */

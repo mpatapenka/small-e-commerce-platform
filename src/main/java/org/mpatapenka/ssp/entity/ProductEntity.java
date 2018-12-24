@@ -19,7 +19,7 @@ import java.util.Set;
 
 @Data
 @Entity
-@Table(name = "_PRODUCT")
+@Table(name = "_product")
 public class ProductEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

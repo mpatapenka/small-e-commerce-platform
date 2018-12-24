@@ -3,6 +3,7 @@ package org.mpatapenka.ssp.repository;
 import org.mpatapenka.ssp.entity.ProductEntity;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
@@ -10,7 +11,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Repository
-public interface ProductRepository extends IdRepository<ProductEntity> {
+public interface ProductRepository extends CrudRepository<ProductEntity, Long> {
     Collection<ProductEntity> findByCategoryId(long categoryId);
     Collection<ProductEntity> findByCategoryIdAndIsArchived(long categoryId, boolean isArchived, Sort sort);
     Collection<ProductEntity> findBySalePriceIsNotNullAndIsArchivedIsFalse();
