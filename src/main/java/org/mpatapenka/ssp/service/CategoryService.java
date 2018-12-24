@@ -6,6 +6,7 @@ import java.util.Collection;
 
 public interface CategoryService {
     Collection<Category> getAll();
-    void save(Iterable<Category> categories);
-    void remove(long categoryId);
+    Collection<Category> getAllActive();
+    void saveAll(Collection<Category> categories);
+    void removeAll(Collection<Long> categoryIds);
 }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
+import java.util.Collections;
 
 @RestController
 @RequestMapping("api/v1/sizes")
@@ -21,8 +22,8 @@ public class SizeController {
     private final SizeService sizeService;
 
     @GetMapping
-    public ResponseEntity<Collection<Size>> getSizes() {
-        return ResponseEntity.ok(sizeService.getAll());
+    public ResponseEntity<Collection<Size>> getSizes(@RequestParam(value = "archived", required = false) boolean archived) {
+        return ResponseEntity.ok(archived ? sizeService.getAll() : sizeService.getAllActive());
     }
 
     @GetMapping(params = "category_id")
@@ -30,15 +31,15 @@ public class SizeController {
         return ResponseEntity.ok(sizeService.getAll(categoryId));
     }
 
-    @PutMapping("{id}")
-    public ResponseEntity<?> archiveSize(@PathVariable("id") long sizeId) {
-        sizeService.archive(sizeId);
+    @PutMapping
+    public ResponseEntity<?> updateSizes(Collection<Size> sizes) {
+        sizeService.saveAll(sizes);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("{id}")
     public ResponseEntity<?> removeSize(@PathVariable("id") long sizeId) {
-        sizeService.remove(sizeId);
+        sizeService.removeAll(Collections.singleton(sizeId));
         return ResponseEntity.ok().build();
     }
 }

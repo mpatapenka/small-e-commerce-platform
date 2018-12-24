@@ -1,9 +1,3 @@
-spring.servlet.multipart:
-  enabled: true
-  file-size-threshold: 2KB
-  max-file-size: 7MB
-  max-request-size: 10MB
-
 ssp:
   confirmation-emails:
     - maksim.patapenka@gmail.com
@@ -11,3 +5,30 @@ ssp:
     # Price in BYN
     cash-on-delivery: 3
   image-storage-location: ./images
+
+spring:
+  datasource:
+    url: jdbc:h2:./database/dev
+    username: root
+    password: password
+    hikari:
+      maximum-pool-size: 3
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        show_sql: true
+        use_sql: true
+        format_sql: true
+  servlet.multipart:
+    enabled: true
+    file-size-threshold: 2KB
+    max-file-size: 7MB
+    max-request-size: 10MB
+
+logging:
+  file: ./logs/ssp_sv.log
+  level:
+    org.springframework.transaction.interceptor: TRACE
+    org.mpatapenka.ssp: DEBUG

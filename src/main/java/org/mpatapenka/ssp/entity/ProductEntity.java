@@ -1,6 +1,7 @@
 package org.mpatapenka.ssp.entity;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import lombok.Data;
 
 import javax.persistence.CascadeType;
@@ -14,6 +15,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
@@ -34,7 +36,7 @@ public class ProductEntity {
     private CategoryEntity category;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<ProductItemEntity> productItems = Lists.newArrayList();
+    private Set<ProductItemEntity> productItems = Sets.newLinkedHashSet();
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<ImageEntity> images = Lists.newArrayList();

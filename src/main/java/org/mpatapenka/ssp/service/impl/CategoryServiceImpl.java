@@ -25,7 +25,6 @@ public class CategoryServiceImpl implements CategoryService {
     private final Transformer<CategoryEntity, Category> categoryTransformer;
 
     @Override
-    @Transactional(readOnly = true)
     public Collection<Category> getAll() {
         return StreamSupport.stream(categoryRepository.findAll().spliterator(), false)
                 .sorted(Comparator.comparingInt(CategoryEntity::getPriority))
@@ -34,8 +33,17 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    public Collection<Category> getAllActive() {
+        return StreamSupport.stream(categoryRepository.findAll().spliterator(), false)
+                .filter(CategoryEntity::isArchived)
+                .sorted(Comparator.comparingInt(CategoryEntity::getPriority))
+                .map(categoryTransformer::forward)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     @Transactional
-    public void save(Iterable<Category> categories) {
+    public void saveAll(Collection<Category> categories) {
         Map<Long, Category> toUpdate = Maps.newLinkedHashMap();
         List<Category> toAdd = Lists.newArrayList();
 
@@ -69,8 +77,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
-    public void remove(long categoryId) {
-        categoryRepository.findById(categoryId)
-                .ifPresent(categoryRepository::delete);
+    public void removeAll(Collection<Long> categoryIds) {
+        categoryRepository.deleteAll(categoryRepository.findAllById(categoryIds));
     }
 }

@@ -11,7 +11,6 @@ import org.mpatapenka.ssp.service.ImageService;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -52,8 +51,7 @@ public class FileSystemImageService implements ImageService {
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public Resource loadAsResource(long id) {
+    public Resource getAsResource(long id) {
         Exception exceptionToWrap = null;
         Optional<ImageEntity> imageEntityOptional = imageRepository.findById(id);
         if (imageEntityOptional.isPresent()) {
@@ -72,9 +70,9 @@ public class FileSystemImageService implements ImageService {
     }
 
     @Override
-    public ImageEntity store(MultipartFile image) {
+    public ImageEntity save(MultipartFile image) {
         String filename = StringUtils.cleanPath(image.getOriginalFilename());
-        log.debug("File name to save: {}", filename);
+        log.debug("File name to saveAll: {}", filename);
         try {
             // Check if the file's name contains invalid characters
             if (filename.contains("..")) {
@@ -84,7 +82,7 @@ public class FileSystemImageService implements ImageService {
             String systemPath = generateFilePath(filename);
             Path targetLocation = storageLocation.resolve(systemPath);
 
-            log.debug("Generated system path: {}, resolved path to save: {}.", systemPath, targetLocation);
+            log.debug("Generated system path: {}, resolved path to saveAll: {}.", systemPath, targetLocation);
 
             Files.createDirectories(targetLocation);
             Files.copy(image.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
@@ -94,24 +92,22 @@ public class FileSystemImageService implements ImageService {
             imageEntity.setPath(systemPath);
             return imageRepository.save(imageEntity);
         } catch (IOException e) {
-            throw new ServiceException("Could not store the image " + filename, e);
+            throw new ServiceException("Could not saveAll the image " + filename, e);
         }
     }
 
     @Override
-    @Transactional
-    public Collection<ImageEntity> store(MultipartFile[] images) {
+    public Collection<ImageEntity> saveAll(MultipartFile[] images) {
         return Arrays.stream(images)
                 .filter(Objects::nonNull)
-                .map(this::store)
+                .map(this::save)
                 .collect(Collectors.toList());
     }
 
     @Override
-    @Transactional
-    public boolean remove(Iterable<ImageEntity> imageEntities) {
+    public boolean removeAll(Collection<ImageEntity> imageEntities) {
         AtomicInteger failedImages = new AtomicInteger(0);
-        StreamSupport.stream(imageEntities.spliterator(), true)
+        imageEntities.parallelStream()
                 .filter(Objects::nonNull)
                 .forEach(img -> {
                     try {

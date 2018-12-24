@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -21,7 +22,6 @@ public class SizeServiceImpl implements SizeService {
     private final Transformer<SizeEntity, Size> sizeTransformer;
 
     @Override
-    @Transactional(readOnly = true)
     public Collection<Size> getAll() {
         return StreamSupport.stream(sizeRepository.findAll().spliterator(), true)
                 .map(sizeTransformer::forward)
@@ -29,24 +29,34 @@ public class SizeServiceImpl implements SizeService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Collection<Size> getAll(long categoryId) {
         return sizeRepository.findByCategoriesIdOrderByCategoriesNumericSymbolicAsc(Collections.singleton(categoryId)).stream()
+                .filter(SizeEntity::isArchived)
+                .map(sizeTransformer::forward)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public Collection<Size> getAllActive() {
+        return StreamSupport.stream(sizeRepository.findAll().spliterator(), true)
+                .filter(SizeEntity::isArchived)
                 .map(sizeTransformer::forward)
                 .collect(Collectors.toList());
     }
 
     @Override
     @Transactional
-    public void archive(long sizeId) {
-        sizeRepository.findById(sizeId)
-                .ifPresent(sizeEntity -> sizeEntity.setArchived(true));
+    public void saveAll(Collection<Size> sizes) {
+        sizes.parallelStream()
+                .filter(Objects::nonNull)
+                .forEach(size -> sizeRepository.findById(size.getId())
+                        .ifPresentOrElse(sizeEntity -> sizeEntity.setArchived(size.isArchived()),
+                                () -> sizeRepository.save(sizeTransformer.backward(size))));
     }
 
     @Override
     @Transactional
-    public void remove(long sizeId) {
-        sizeRepository.findById(sizeId)
-                .ifPresent(sizeRepository::delete);
+    public void removeAll(Collection<Long> sizeIds) {
+        sizeRepository.deleteAll(sizeRepository.findAllById(sizeIds));
     }
 }

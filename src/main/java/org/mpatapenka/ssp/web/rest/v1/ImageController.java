@@ -3,7 +3,6 @@ package org.mpatapenka.ssp.web.rest.v1;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mpatapenka.ssp.domain.Image;
-import org.mpatapenka.ssp.entity.CategoryEntity;
 import org.mpatapenka.ssp.entity.ImageEntity;
 import org.mpatapenka.ssp.service.ImageService;
 import org.mpatapenka.ssp.transform.Transformer;
@@ -25,7 +24,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("images")
+@RequestMapping("api/v1/images")
 @Slf4j
 @RequiredArgsConstructor
 public class ImageController {
@@ -34,14 +33,14 @@ public class ImageController {
 
     @PostMapping
     public ResponseEntity<List<Image>> upload(@RequestParam("images") MultipartFile[] images) {
-        return ResponseEntity.ok(imageService.store(images).parallelStream()
+        return ResponseEntity.ok(imageService.saveAll(images).parallelStream()
                 .map(imageTransformer::forward)
                 .collect(Collectors.toList()));
     }
 
     @GetMapping("/{id:.+}")
     public ResponseEntity<Resource> download(@PathVariable long id, HttpServletRequest request) {
-        Resource resource = imageService.loadAsResource(id);
+        Resource resource = imageService.getAsResource(id);
 
         String contentType = null;
         try {

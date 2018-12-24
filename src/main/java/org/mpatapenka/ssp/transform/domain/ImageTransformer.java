@@ -3,6 +3,7 @@ package org.mpatapenka.ssp.transform.domain;
 import lombok.RequiredArgsConstructor;
 import org.mpatapenka.ssp.domain.Image;
 import org.mpatapenka.ssp.entity.ImageEntity;
+import org.mpatapenka.ssp.repository.IdRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -11,6 +12,8 @@ import javax.annotation.Nonnull;
 @Component
 @RequiredArgsConstructor
 public class ImageTransformer extends NullSafeTransformer<ImageEntity, Image> {
+    private final IdRepository<ImageEntity> imageRepository;
+
     @Override
     Image safeForward(@Nonnull ImageEntity imageEntity) {
         Image image = new Image();
@@ -22,7 +25,7 @@ public class ImageTransformer extends NullSafeTransformer<ImageEntity, Image> {
 
     @Override
     ImageEntity safeBackward(@Nonnull Image image) {
-        throw new UnsupportedOperationException("Convert image to image entity is not supported!");
+        return imageRepository.findById(image.getId()).orElse(null);
     }
 
     private String buildDownloadUri(ImageEntity imageEntity) {
