@@ -3,9 +3,7 @@ package org.mpatapenka.ssp.web.rest.v1;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mpatapenka.ssp.domain.Image;
-import org.mpatapenka.ssp.entity.ImageEntity;
 import org.mpatapenka.ssp.service.ImageService;
-import org.mpatapenka.ssp.transform.Transformer;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -20,8 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Collection;
 
 @RestController
 @RequestMapping("api/v1/images")
@@ -29,24 +26,21 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ImageController {
     private final ImageService imageService;
-    private final Transformer<ImageEntity, Image> imageTransformer;
 
     @PostMapping
-    public ResponseEntity<List<Image>> upload(@RequestParam("images") MultipartFile[] images) {
-        return ResponseEntity.ok(imageService.saveAll(images).parallelStream()
-                .map(imageTransformer::forward)
-                .collect(Collectors.toList()));
+    public ResponseEntity<Collection<Image>> upload(@RequestParam("images") MultipartFile[] images) {
+        return ResponseEntity.ok(imageService.saveAll(images));
     }
 
     @GetMapping("/{id:.+}")
     public ResponseEntity<Resource> download(@PathVariable long id, HttpServletRequest request) {
-        Resource resource = imageService.getAsResource(id);
+        Image image = imageService.get(id);
 
         String contentType = null;
         try {
-            contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+            contentType = request.getServletContext().getMimeType(image.getResource().getFile().getAbsolutePath());
         } catch (IOException e) {
-            log.info("Could not determine file type of resource: {}", resource.getFilename());
+            log.info("Could not determine file type of resource: {}", image.getResource().getFilename());
         }
 
         // Fallback to the default content type if type could not be determined
@@ -56,7 +50,7 @@ public class ImageController {
 
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(contentType))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
-                .body(resource);
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + image.getName() + "\"")
+                .body(image.getResource());
     }
 }

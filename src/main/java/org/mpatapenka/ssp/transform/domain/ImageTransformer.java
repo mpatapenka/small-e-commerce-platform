@@ -19,7 +19,7 @@ public class ImageTransformer extends NullSafeTransformer<ImageEntity, Image> {
         Image image = new Image();
         image.setId(imageEntity.getId());
         image.setName(imageEntity.getOriginalName());
-        image.setDownloadUri(buildDownloadUri(imageEntity));
+        image.setDownloadUrl(buildDownloadUri(imageEntity));
         return image;
     }
 

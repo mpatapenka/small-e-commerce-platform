@@ -1,14 +1,13 @@
 package org.mpatapenka.ssp.service;
 
-import org.mpatapenka.ssp.entity.ImageEntity;
-import org.springframework.core.io.Resource;
+import org.mpatapenka.ssp.domain.Image;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Collection;
 
 public interface ImageService {
-    Resource getAsResource(long id);
-    ImageEntity save(MultipartFile image);
-    Collection<ImageEntity> saveAll(MultipartFile[] images);
-    boolean removeAll(Collection<ImageEntity> images);
+    Image get(long id);
+    Image save(MultipartFile image);
+    Collection<Image> saveAll(MultipartFile[] images);
+    boolean removeAll(Collection<Image> images);
 }

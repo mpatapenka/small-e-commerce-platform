@@ -32,14 +32,12 @@ public class SizeController {
     }
 
     @PutMapping
-    public ResponseEntity<?> updateSizes(Collection<Size> sizes) {
+    public void updateSizes(Collection<Size> sizes) {
         sizeService.saveAll(sizes);
-        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<?> removeSize(@PathVariable("id") long sizeId) {
+    public void removeSize(@PathVariable("id") long sizeId) {
         sizeService.removeAll(Collections.singleton(sizeId));
-        return ResponseEntity.ok().build();
     }
 }

@@ -3,11 +3,13 @@ package org.mpatapenka.ssp.service.impl;
 import com.google.common.hash.Hashing;
 import lombok.extern.slf4j.Slf4j;
 import org.mpatapenka.ssp.SspProperties;
+import org.mpatapenka.ssp.domain.Image;
 import org.mpatapenka.ssp.entity.ImageEntity;
 import org.mpatapenka.ssp.exception.ImageNotFoundException;
 import org.mpatapenka.ssp.exception.ServiceException;
 import org.mpatapenka.ssp.repository.ImageRepository;
 import org.mpatapenka.ssp.service.ImageService;
+import org.mpatapenka.ssp.transform.Transformer;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -35,22 +37,25 @@ import java.util.stream.Collectors;
 public class FileSystemImageService implements ImageService {
     private final Path storageLocation;
     private final ImageRepository imageRepository;
+    private final Transformer<ImageEntity, Image> imageTransformer;
 
-    public FileSystemImageService(SspProperties props, ImageRepository imageRepository) {
+    public FileSystemImageService(SspProperties props, ImageRepository imageRepository,
+            Transformer<ImageEntity, Image> imageTransformer) {
         this.storageLocation = Paths.get(props.getImageStorageLocation()).toAbsolutePath().normalize();
         this.imageRepository = imageRepository;
+        this.imageTransformer = imageTransformer;
 
         log.debug("Storage location is: {}.", storageLocation);
 
         try {
             Files.createDirectories(storageLocation);
         } catch (IOException e) {
-            throw new RuntimeException("Could not create the directory where the uploaded images will be stored!", e);
+            throw new ServiceException("Could not create the directory where the uploaded images will be stored!", e);
         }
     }
 
     @Override
-    public Resource getAsResource(long id) {
+    public Image get(long id) {
         Exception exceptionToWrap = null;
         Optional<ImageEntity> imageEntityOptional = imageRepository.findById(id);
         if (imageEntityOptional.isPresent()) {
@@ -59,7 +64,9 @@ public class FileSystemImageService implements ImageService {
             try {
                 Resource resource = new UrlResource(imagePath.toUri());
                 if (resource.exists() && resource.isReadable()) {
-                    return resource;
+                    Image image = imageTransformer.forward(imageEntityOptional.get());
+                    image.setResource(resource);
+                    return image;
                 }
             } catch (MalformedURLException e) {
                 exceptionToWrap = e;
@@ -69,7 +76,7 @@ public class FileSystemImageService implements ImageService {
     }
 
     @Override
-    public ImageEntity save(MultipartFile image) {
+    public Image save(MultipartFile image) {
         String filename = StringUtils.cleanPath(image.getOriginalFilename());
         log.debug("File name to saveAll: {}", filename);
         try {
@@ -81,7 +88,7 @@ public class FileSystemImageService implements ImageService {
             String systemPath = generateFilePath(filename);
             Path targetLocation = storageLocation.resolve(systemPath);
 
-            log.debug("Generated system path: {}, resolved path to saveAll: {}.", systemPath, targetLocation);
+            log.debug("Generated system path: {}, resolved path to save: {}.", systemPath, targetLocation);
 
             Files.createDirectories(targetLocation);
             Files.copy(image.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
@@ -89,14 +96,14 @@ public class FileSystemImageService implements ImageService {
             ImageEntity imageEntity = new ImageEntity();
             imageEntity.setOriginalName(filename);
             imageEntity.setPath(systemPath);
-            return imageRepository.save(imageEntity);
+            return imageTransformer.forward(imageRepository.save(imageEntity));
         } catch (IOException e) {
             throw new ServiceException("Could not saveAll the image " + filename, e);
         }
     }
 
     @Override
-    public Collection<ImageEntity> saveAll(MultipartFile[] images) {
+    public Collection<Image> saveAll(MultipartFile[] images) {
         return Arrays.stream(images)
                 .filter(Objects::nonNull)
                 .map(this::save)
@@ -104,10 +111,13 @@ public class FileSystemImageService implements ImageService {
     }
 
     @Override
-    public boolean removeAll(Collection<ImageEntity> imageEntities) {
+    public boolean removeAll(Collection<Image> images) {
         AtomicInteger failedImages = new AtomicInteger(0);
-        imageEntities.parallelStream()
+        images.parallelStream()
                 .filter(Objects::nonNull)
+                .map(img -> imageRepository.findById(img.getId()))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
                 .forEach(img -> {
                     try {
                         Files.deleteIfExists(storageLocation.resolve(img.getPath()));
