@@ -7,6 +7,7 @@ import org.mpatapenka.ssp.validation.constraint.EmailList;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -26,6 +27,7 @@ public class SspProperties {
     private String imageStorageLocation;
 
     /** Price subfolder for different types of prices. */
+    @Valid
     private DeliveryPrice deliveryPrices = new DeliveryPrice();
 
     @Getter
