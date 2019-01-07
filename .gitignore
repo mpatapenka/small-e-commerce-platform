@@ -33,3 +33,6 @@ gradle-app.setting
 *.iws
 *.iml
 out/
+
+### Database ###
+database

@@ -20,7 +20,7 @@ public class EmailListValidator implements ConstraintValidator<EmailList, List<S
 
         for (String value : values) {
             if (!hibernateEmailValidator.isValid(value, context)) {
-                log.error("Email '{}' is not valid!", value);
+                log.warn("Email '{}' is not valid!", value);
                 return false;
             }
         }

@@ -27,7 +27,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Collection<Category> getAll() {
         return StreamSupport.stream(categoryRepository.findAll().spliterator(), false)
-                .sorted(Comparator.comparingInt(CategoryEntity::getPriority))
+                .sorted(Comparator.nullsLast(Comparator.comparing(CategoryEntity::getPriority)))
                 .map(categoryTransformer::forward)
                 .collect(Collectors.toList());
     }
@@ -36,7 +36,7 @@ public class CategoryServiceImpl implements CategoryService {
     public Collection<Category> getAllActive() {
         return StreamSupport.stream(categoryRepository.findAll().spliterator(), false)
                 .filter(CategoryEntity::isArchived)
-                .sorted(Comparator.comparingInt(CategoryEntity::getPriority))
+                .sorted(Comparator.nullsLast(Comparator.comparing(CategoryEntity::getPriority)))
                 .map(categoryTransformer::forward)
                 .collect(Collectors.toList());
     }
@@ -69,10 +69,10 @@ public class CategoryServiceImpl implements CategoryService {
 
     private void updateEntity(CategoryEntity entity, Category category) {
         CategoryEntity builtInEntity = categoryTransformer.backward(category);
-        entity.setName(builtInEntity.getName());
         entity.setPriority(builtInEntity.getPriority());
-        entity.setIcon(builtInEntity.getIcon());
+        entity.setName(builtInEntity.getName());
         entity.setArchived(builtInEntity.isArchived());
+        entity.setIcon(builtInEntity.getIcon());
     }
 
     @Override

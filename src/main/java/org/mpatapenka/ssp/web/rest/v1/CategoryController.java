@@ -2,7 +2,6 @@ package org.mpatapenka.ssp.web.rest.v1;
 
 import lombok.RequiredArgsConstructor;
 import org.mpatapenka.ssp.domain.Category;
-import org.mpatapenka.ssp.domain.Size;
 import org.mpatapenka.ssp.service.CategoryService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,14 +27,12 @@ public class CategoryController {
     }
 
     @PutMapping
-    public ResponseEntity<?> updateCategories(Collection<Category> categories) {
+    public void updateCategories(Collection<Category> categories) {
         categoryService.saveAll(categories);
-        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<?> removeSize(@PathVariable("id") long categoryId) {
+    public void removeSize(@PathVariable("id") long categoryId) {
         categoryService.removeAll(Collections.singleton(categoryId));
-        return ResponseEntity.ok().build();
     }
 }

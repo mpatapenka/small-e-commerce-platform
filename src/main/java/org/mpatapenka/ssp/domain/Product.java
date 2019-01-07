@@ -1,14 +1,12 @@
 package org.mpatapenka.ssp.domain;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -23,6 +21,6 @@ public class Product {
     private BigDecimal salePrice;
     private boolean archived;
     private Category category;
-    private Set<ProductItem> productItems = Sets.newLinkedHashSet();
+    private List<ProductItem> productItems = Lists.newArrayList();
     private List<Image> images = Lists.newArrayList();
 }
