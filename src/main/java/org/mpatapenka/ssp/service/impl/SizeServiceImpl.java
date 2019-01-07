@@ -30,7 +30,7 @@ public class SizeServiceImpl implements SizeService {
 
     @Override
     public Collection<Size> getAll(long categoryId) {
-        return sizeRepository.findByCategoriesIdOrderByCategoriesNumericSymbolicAsc(Collections.singleton(categoryId)).stream()
+        return sizeRepository.findByCategoriesIdOrderByNumericAsc(Collections.singleton(categoryId)).stream()
                 .filter(SizeEntity::isArchived)
                 .map(sizeTransformer::forward)
                 .collect(Collectors.toList());

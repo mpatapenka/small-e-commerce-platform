@@ -8,5 +8,5 @@ import java.util.Collection;
 
 @Repository
 public interface SizeRepository extends CrudRepository<SizeEntity, Long> {
-    Collection<SizeEntity> findByCategoriesIdOrderByCategoriesNumericSymbolicAsc(Collection<Long> categoriesId);
+    Collection<SizeEntity> findByCategoriesIdOrderByNumericAsc(Collection<Long> categoriesId);
 }
