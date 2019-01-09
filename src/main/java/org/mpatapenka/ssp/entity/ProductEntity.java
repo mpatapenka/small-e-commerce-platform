@@ -1,8 +1,8 @@
 package org.mpatapenka.ssp.entity;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import lombok.Data;
+import org.hibernate.annotations.SortNatural;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -14,8 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.Set;
+import java.util.SortedSet;
 
 @Data
 @Entity
@@ -36,8 +35,10 @@ public class ProductEntity {
     private CategoryEntity category;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<ProductItemEntity> productItems = Sets.newLinkedHashSet();
+    @SortNatural
+    private SortedSet<ProductItemEntity> productItems = Sets.newTreeSet();
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<ImageEntity> images = Lists.newArrayList();
+    @SortNatural
+    private SortedSet<ImageEntity> images = Sets.newTreeSet();
 }

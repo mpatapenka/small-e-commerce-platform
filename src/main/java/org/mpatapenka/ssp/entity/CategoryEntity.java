@@ -1,6 +1,7 @@
 package org.mpatapenka.ssp.entity;
 
 import lombok.Data;
+import org.mpatapenka.ssp.util.Comparators;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -13,7 +14,7 @@ import javax.persistence.Table;
 @Data
 @Entity
 @Table(name = "_category")
-public class CategoryEntity {
+public class CategoryEntity implements Comparable<CategoryEntity> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,4 +24,9 @@ public class CategoryEntity {
 
     @OneToOne(cascade = CascadeType.ALL)
     private ImageEntity icon;
+
+    @Override
+    public int compareTo(CategoryEntity that) {
+        return Comparators.NULL_LAST_INTEGER_COMPARATOR.compare(this.priority, that.priority);
+    }
 }

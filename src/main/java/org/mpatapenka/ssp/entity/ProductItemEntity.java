@@ -1,7 +1,9 @@
 package org.mpatapenka.ssp.entity;
 
-import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import lombok.Data;
+import org.hibernate.annotations.SortNatural;
+import org.mpatapenka.ssp.util.Comparators;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -11,12 +13,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import java.util.List;
+import java.util.SortedSet;
 
 @Data
 @Entity
 @Table(name = "_product_item")
-public class ProductItemEntity {
+public class ProductItemEntity implements Comparable<ProductItemEntity> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,5 +26,11 @@ public class ProductItemEntity {
     private String name;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<SizeEntity> sizes = Lists.newArrayList();
+    @SortNatural
+    private SortedSet<SizeEntity> sizes = Sets.newTreeSet();
+
+    @Override
+    public int compareTo(ProductItemEntity that) {
+        return Comparators.NULL_LAST_INTEGER_COMPARATOR.compare(this.priority, that.priority);
+    }
 }

@@ -1,6 +1,7 @@
 package org.mpatapenka.ssp.entity;
 
 import lombok.Data;
+import org.mpatapenka.ssp.util.Comparators;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,10 +12,15 @@ import javax.persistence.Table;
 @Data
 @Entity
 @Table(name = "_image")
-public class ImageEntity {
+public class ImageEntity implements Comparable<ImageEntity> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String path;
     private String originalName;
+
+    @Override
+    public int compareTo(ImageEntity that) {
+        return Comparators.NULL_LAST_STRING_COMPARATOR.compare(this.originalName, that.originalName);
+    }
 }
