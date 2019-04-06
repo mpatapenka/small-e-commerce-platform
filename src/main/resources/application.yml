@@ -1,10 +1,12 @@
-ssp:
+secp:
   confirmation-emails:
     - maksim.patapenka@gmail.com
   delivery-prices:
     # Price in BYN
     cash-on-delivery: 3
   image-storage-location: ./images
+  contacts:
+    app-name: SECP
 
 spring:
   datasource:
