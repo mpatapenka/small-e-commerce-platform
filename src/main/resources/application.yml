@@ -1,36 +1,41 @@
-secp:
+in-love:
   confirmation-emails:
     - maksim.patapenka@gmail.com
   delivery-prices:
-    # Price in BYN
-    cash-on-delivery: 3
+    cash-on-delivery: 3 # BYN
   image-storage-location: ./images
-  contacts:
-    app-name: SECP
+  meta-info:
+    title: InLove-Shop REST API
+    description: Provides REST API to interact with InLove-Shop web application
+    version: 1.0.0
+    contacts:
+      app-name: InLove-Shop
 
 spring:
+  profiles:
+    active: dev
   datasource:
-    url: jdbc:h2:./database/dev
-    username: root
-    password: password
     hikari:
       maximum-pool-size: 3
-  jpa:
-    hibernate:
-      ddl-auto: update
-    properties:
-      hibernate:
-        show_sql: true
-        use_sql: true
-        format_sql: true
   servlet.multipart:
-    enabled: true
-    file-size-threshold: 2KB
     max-file-size: 7MB
-    max-request-size: 10MB
-
-logging:
-  file: ./logs/ssp_sv.log
-  level:
-    org.springframework.transaction.interceptor: TRACE
-    org.mpatapenka.ssp: DEBUG
+  thymeleaf:
+    cache: false
+  mvc:
+    static-path-pattern: /resources/**
+  messages:
+    basename: languages/messages
+  security:
+    user:
+      name: admin
+      password: admin
+      roles: ADMIN
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${mail.username}
+    password: ${mail.password}
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+      mail.transport.protocol: smtp

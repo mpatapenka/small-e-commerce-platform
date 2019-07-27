@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml" lang="ru">
+<head>
+    <title th:text="${'InLove - ' + product.name}"></title>
+
+    <meta th:include="fragment/meta :: meta-info" th:remove="tag"/>
+
+    <link th:href="@{/resources/vendors/bootstrap/css/bootstrap.min.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{/resources/css/styles.css}" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <meta th:include="fragment/common-body-meta :: body-meta-info" th:remove="tag"/>
+
+    <header th:replace="fragment/header :: header(productPage = 'y')"></header>
+
+    <main role="main">
+        <div class="container main-content">
+            <div class="row">
+                <div class="col product-image-box">
+                    <div th:if="${product.salePrice != null}" class="sale-block">SALE</div>
+                    <div th:if="${not #lists.isEmpty(product.images)}" id="imagesCarousel" class="carousel slide" data-ride="carousel">
+                        <ol class="carousel-indicators">
+                            <li th:each="img, stat : ${product.images}" data-target="#imagesCarousel" th:data-slide-to="${stat.index}" th:class="${stat.index == 0 ? 'active' : ''}"></li>
+                        </ol>
+                        <div class="carousel-inner">
+                            <div th:each="img, stat : ${product.images}" th:class="${stat.index == 0 ? 'carousel-item active' : 'carousel-item'}">
+                                <img class="d-block w-100" th:src="@{'/images?path=' + ${img.path}}" th:alt="${img.originalName}">
+                            </div>
+                        </div>
+                        <a class="carousel-control-prev" href="#imagesCarousel" role="button" data-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Назад</span>
+                        </a>
+                        <a class="carousel-control-next" href="#imagesCarousel" role="button" data-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Вперед</span>
+                        </a>
+                    </div>
+                    <img th:if="${#lists.isEmpty(product.images)}" th:src="@{/resources/img/img-not-found.png}" alt="Пустое изображение товара">
+                </div>
+                <div class="col">
+                    <div class="product-description">
+                        <table class="table table-striped">
+                            <tbody>
+                                <tr>
+                                    <td>Наименование</td>
+                                    <td><span th:text="${product.name}"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>Описание</td>
+                                    <td><span th:text="${product.description}"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>Состав</td>
+                                    <td><span th:text="${product.composition}"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>Производитель</td>
+                                    <td><span th:text="${product.fabricator}"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>Цена</td>
+                                    <td class="text-danger h3">
+                                        <span th:if="${product.salePrice == null}" th:text="${product.price}"></span>
+                                        <span th:if="${product.salePrice != null}" style="text-decoration: line-through;" th:text="${product.price}"></span>
+                                        <span th:if="${product.salePrice != null}" th:text="${product.salePrice}"></span>
+                                        BYN
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <form id="product-order-form" class="product-order-block" th:action="@{/order/add-to-cart}" method="post">
+                            <input type="hidden" name="id" th:value="${product.id}">
+                            <div class="row mb-2">
+                                <div class="col-2">Размеры:</div>
+                                <div class="col-10">
+                                    <div th:each="productItem, stat : ${product.productItems}">
+                                        <input type="hidden" th:name="'productItemCarts[' + ${stat.index} + '].id'"
+                                               th:value="${productItem.id}">
+                                        <span th:if="${!#strings.isEmpty(productItem.name)}" style="text-transform: capitalize;" th:text="${productItem.name}"></span><span th:if="${!#strings.isEmpty(productItem.name)}">:</span>
+                                        <select class="form-control" th:name="'productItemCarts[' + ${stat.index} + '].sizeId'">
+                                            <option value="" selected>Выберите...</option>
+                                            <option th:each="size : ${productItem.sizes}" th:value="${size.id}"
+                                                    th:text="${size.value}"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <button id="product-order-form-submit" class="btn btn-primary" style="width: 100%" type="button">Добавить в корзину</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer th:replace="fragment/footer :: footer"></footer>
+    </main>
+
+    <script th:src="@{/resources/vendors/jquery/js/jquery-3.3.1.min.js}"></script>
+    <script th:src="@{/resources/vendors/bootstrap/js/popper.js}"></script>
+    <script th:src="@{/resources/vendors/bootstrap/js/bootstrap.min.js}"></script>
+    <script th:src="@{/resources/js/general-scripts.js}"></script>
+    <script th:src="@{/resources/js/initialize.js}"></script>
+    <script>
+        $('.carousel').carousel({
+            interval: 7000
+        }).on('slide.bs.carousel', function (e) {
+            var nextH = $(e.relatedTarget).height();
+            $(this).find('.active.carousel-item').parent().animate({height: nextH}, 700);
+        });
+    </script>
+</body>
+</html>

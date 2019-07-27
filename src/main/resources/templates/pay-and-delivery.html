@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml" lang="ru">
+<head>
+    <title>InLove - Оплата и доставка</title>
+
+    <meta th:include="fragment/meta :: meta-info" th:remove="tag"/>
+
+    <link th:href="@{/resources/vendors/bootstrap/css/bootstrap.min.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{/resources/css/styles.css}" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <meta th:include="fragment/common-body-meta :: body-meta-info" th:remove="tag"/>
+
+    <header th:replace="fragment/header :: header(payAndDeliveryPage = 'y')"></header>
+
+    <main role="main">
+        <div class="container main-content">
+            <div class="headers">
+                <h1>Оплата и доставка</h1>
+                <h2>Спасибо, что выбрали нас! Ну или собираетесь выбрать ;)</h2>
+            </div>
+
+            <div class="accordions">
+                <div class="accordion-container">
+                    <div class="accordion d-flex flex-row align-items-center">
+                        1. Как сделать заказ?
+                    </div>
+                    <div class="accordion-panel">
+                        <p>Сделать заказ в интернет-магазине нижнего белья INLOVE очень просто. Для этого Вам необходимо нажать на понравившуюся модель, выбрать размер, а затем нажать кнопку "Добавить в корзину". После необходимо оформить заказ, заполнив простую форму с вашими данными. В течении дня с Вами свяжется наш менеджер для уточнения деталей заказа.</p>
+                    </div>
+                </div>
+
+                <div class="accordion-container">
+                    <div class="accordion d-flex flex-row align-items-center">
+                        2. Какая минимальная сумма заказа?
+                    </div>
+                    <div class="accordion-panel">
+                        <p>Минимальная сумма заказа составляет 10 бел.руб.</p>
+                    </div>
+                </div>
+
+                <div class="accordion-container">
+                    <div class="accordion d-flex flex-row align-items-center">
+                        3. Оплата и доставка товара
+                    </div>
+                    <div class="accordion-panel">
+                        <p>Наши покупатели оплачивают товар наложенным платежом при получении заказа в ближайшем отделении почтовой связи.</p>
+                    </div>
+                </div>
+
+                <div class="accordion-container">
+                    <div class="accordion d-flex flex-row align-items-center">
+                        4. Стоимость доставки
+                    </div>
+                    <div class="accordion-panel">
+                        <p>Стоимость доставки – 3 бел. руб. При заказе на сумму свыше 35 бел. руб. доставка БЕСПЛАТНАЯ.</p>
+                    </div>
+                </div>
+
+                <div class="accordion-container">
+                    <div class="accordion d-flex flex-row align-items-center">
+                        5. Как быстро доходит товар до покупателя?
+                    </div>
+                    <div class="accordion-panel">
+                        <p>Заказы до наших покупателей идут 3-5 дней (в зависимости от скорости работы почты). При заказе до 14:00 отправка осуществляется в этот же день, а после 14:00 на следующий день после оформления заказа. После отправки посылки, мы высылаем на номер Вашего телефона трек-код по которому можно отследить посылку на сайте Белпочты.</p>
+                    </div>
+                </div>
+
+                <div class="accordion-container">
+                    <div class="accordion d-flex flex-row align-items-center">
+                        6. Почему мы выбрали именно этот вариант доставки заказа?
+                    </div>
+                    <div class="accordion-panel">
+                        <p>Во-первых, где бы ни находился наш клиент мы всегда до него доберемся, даже если это будет сделано руками сотрудника почтыJ . Во-вторых мы экономим ваши деньги, потому что порой необходимо исколесить транспортом пол города чтобы найти подходящее белье. Мы предлагаем не тратиться на разъезды и поиски, а просто сделать заказ, который приедет к вам прямо в ваш населенный пункт.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer th:replace="fragment/footer :: footer"></footer>
+    </main>
+
+    <script th:src="@{/resources/vendors/jquery/js/jquery-3.3.1.min.js}"></script>
+    <script th:src="@{/resources/vendors/bootstrap/js/popper.js}"></script>
+    <script th:src="@{/resources/vendors/bootstrap/js/bootstrap.min.js}"></script>
+    <script th:src="@{/resources/js/initialize.js}"></script>
+    <!-- Required for accordeons -->
+    <script th:src="@{/resources/js/contact_custom.js}"></script>
+</body>
+</html>

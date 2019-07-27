@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml" lang="ru">
+<head>
+    <title>InLove - Подарочные сертификаты онлайн</title>
+
+    <meta th:include="fragment/meta :: meta-info" th:remove="tag"/>
+
+    <link th:href="@{/resources/vendors/bootstrap/css/bootstrap.min.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{/resources/css/styles.css}" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <meta th:include="fragment/common-body-meta :: body-meta-info" th:remove="tag"/>
+
+    <header th:replace="fragment/header :: header(feedbackPage = 'y')"></header>
+
+    <main role="main">
+        <div class="container main-content text-center">
+            <img th:src="@{/resources/img/page_not_ready.png}" alt="Страница в разработке">
+        </div>
+
+        <footer th:replace="fragment/footer :: footer"></footer>
+    </main>
+
+    <script th:src="@{/resources/vendors/jquery/js/jquery-3.3.1.min.js}"></script>
+    <script th:src="@{/resources/vendors/bootstrap/js/popper.js}"></script>
+    <script th:src="@{/resources/vendors/bootstrap/js/bootstrap.min.js}"></script>
+    <script th:src="@{/resources/js/initialize.js}"></script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" th:href="@{/resources/favicon.ico}">
+
+    <title th:text="#{admin.category.manage.title}">TITLE</title>
+
+    <link th:href="@{/resources/vendors/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+</head>
+
+<body>
+<nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
+    <a class="navbar-brand col-sm-3 col-md-2 mr-0" th:href="@{/admin/dashboard}" th:text="#{admin.category.manage.title}">COMPANY NAME</a>
+    <ul class="navbar-nav px-3">
+        <li class="nav-item text-nowrap">
+            <a class="nav-link" th:href="@{/j_spring_security_logout}" th:text="#{admin.dashboard.signout}">SIGN OUT</a>
+        </li>
+    </ul>
+</nav>
+
+<div class="container">
+    <div class="py-5 text-center">
+        <h2 th:text="#{admin.category.manage.form.title}">CATEGORY EDIT FORM</h2>
+    </div>
+
+    <div class="row justify-content-md-center">
+        <div class="col">
+            <form enctype="multipart/form-data" method="post" th:action="@{/admin/category/manage}">
+                <input type="hidden" name="id" th:value="${categoryDto.id}">
+                <div class="mb-3">
+                    <label for="categoryName"><b th:text="#{admin.category.manage.form.input.name}">NAME</b></label>
+                    <input type="text" class="form-control" id="categoryName" name="name" placeholder="" th:value="${categoryDto.name}">
+                    <p style="color: red" th:if="${#fields.hasErrors('categoryDto.name')}" th:errors="*{categoryDto.name}">NAME ERROR</p>
+                </div>
+
+                <div class="mb-3">
+                    <label for="image"><b th:text="#{admin.category.manage.form.input.image}">IMAGE</b></label>
+                    <input type="file" class="form-control-file" id="image" name="image" accept="image/x-png,image/gif,image/jpeg">
+                    <img th:if="${categoryDto.imagePath != null}" th:src="@{'/images?path=' + ${categoryDto.imagePath}}"/>
+                </div>
+
+                <div class="mb-3">
+                    <label for="headerImage"><b th:text="#{admin.category.manage.form.input.header-image}">HEADER IMAGE</b></label>
+                    <input type="file" class="form-control-file" id="headerImage" name="headerImage" accept="image/x-png,image/gif,image/jpeg">
+                    <img th:if="${categoryDto.headerImagePath != null}" th:src="@{'/images?path=' + ${categoryDto.headerImagePath}}"/>
+                </div>
+
+                <hr class="mb-4">
+
+                <button class="btn btn-primary btn-block" type="submit" th:text="#{control.save}">SAVE</button>
+                <a class="btn btn-danger btn-block" th:href="@{/admin/dashboard}" th:text="#{control.close}">CANCEL</a>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<!-- Scripts -->
+<script th:src="@{/resources/vendors/jquery/js/jquery-3.3.1.min.js}"></script>
+<script th:src="@{/resources/vendors/bootstrap/js/bootstrap.min.js}"></script>
+
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml" lang="ru">
+<head>
+    <!--<link th:href="@{/resources/vendors/bootstrap/css/bootstrap.min.css}" rel="stylesheet" type="text/css">-->
+    <!--<link th:href="@{/resources/css/styles.css}" rel="stylesheet" type="text/css">-->
+    <!--<style>-->
+        <!--table {-->
+            <!--font-family: arial, sans-serif;-->
+            <!--border-collapse: collapse;-->
+            <!--width: 80%;-->
+            <!--margin: auto;-->
+        <!--}-->
+        <!--td, th {-->
+            <!--border: 1px solid #dddddd;-->
+            <!--text-align: left;-->
+            <!--padding: 8px;-->
+        <!--}-->
+        <!--tr:nth-child(even) {-->
+            <!--background-color: #dddddd;-->
+        <!--}-->
+    <!--</style>-->
+</head>
+<body>
+    <main role="main">
+        <div class="container">
+            <h2 class="text-center">Информация о заказчике</h2>
+            <table class="table table-striped">
+                <tbody>
+                    <tr>
+                        <td>ФИО</td>
+                        <td th:text="${shoppingCart.customerInfo.credentials}"></td>
+                    </tr>
+                    <tr>
+                        <td>Электронная почта</td>
+                        <td th:text="${shoppingCart.customerInfo.email}"></td>
+                    </tr>
+                    <tr>
+                        <td>Номер телефона</td>
+                        <td th:text="${shoppingCart.customerInfo.phoneNumber}"></td>
+                    </tr>
+                    <tr>
+                        <td>Почтовый индекс</td>
+                        <td th:text="${shoppingCart.customerInfo.zipCode}"></td>
+                    </tr>
+                    <tr>
+                        <td>Область</td>
+                        <td th:text="${shoppingCart.customerInfo.region}"></td>
+                    </tr>
+                    <tr>
+                        <td>Район</td>
+                        <td th:text="${shoppingCart.customerInfo.area}"></td>
+                    </tr>
+                    <tr>
+                        <td>Город/Агрогородок/Поселок</td>
+                        <td th:text="${shoppingCart.customerInfo.city}"></td>
+                    </tr>
+                    <tr>
+                        <td>Улица</td>
+                        <td th:text="${shoppingCart.customerInfo.street}"></td>
+                    </tr>
+                    <tr>
+                        <td>Номер дома</td>
+                        <td th:text="${shoppingCart.customerInfo.houseNumber}"></td>
+                    </tr>
+                    <tr>
+                        <td>Квартира</td>
+                        <td th:text="${shoppingCart.customerInfo.apartmentsNumber}"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2 class="text-center">Информация о заказанных товарах</h2>
+            <div th:each="entry : ${shoppingCart.products}">
+                <h3><a th:href="${'www.inlove-shop.by/products/' + entry.key.id}" th:text="${entry.key.product.name}"></a></h3>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>Размеры</td>
+                            <td th:text="${T(com.keeprise.app.util.PojoProcessor).getSizes(entry.key)}"></td>
+                        </tr>
+                        <tr>
+                            <td>Количество</td>
+                            <td><span th:text="${entry.value}"></span> штуки</td>
+                        </tr>
+                        <tr>
+                            <td>Цена</td>
+                            <td>
+                                <span th:if="${entry.key.product.salePrice == null}" th:text="${entry.key.product.price}"></span>
+                                <span th:if="${entry.key.product.salePrice != null}" style="text-decoration: line-through;" th:text="${entry.key.product.price}"></span>
+                                <span th:if="${entry.key.product.salePrice != null}" th:text="${entry.key.product.salePrice}"></span>
+                                BYN
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2>Стоимость товаров: <span th:text="${shoppingCart.totalPrice}"></span> BYN (без учета стоимости доставки)</h2>
+        </div>
+    </main>
+    <!--<span th:text="${shoppingCart}"></span>-->
+</body>
+</html>

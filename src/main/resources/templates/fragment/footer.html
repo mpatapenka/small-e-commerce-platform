@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml" lang="ru">
+<head></head>
+<body>
+    <footer class="footer" th:fragment="footer">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col text-center">
+                    <div class="footer-item">
+                        ИП Крот Е.Г., свидетельство о государственной регистрации выдано Речицким районным исполнительным комитетом 15.08.2018г., УНП 491179724.<br>
+                        Регистрация интернет-магазина в Торговом реестре 26.11.2018г. №433661
+                    </div>
+                </div>
+                <div class="col text-center">
+                    <div class="footer-item">
+                        <h6>Мы в социальных сетях:</h6>
+                        <a class="social-link" href="https://www.instagram.com/inlove_by/" target="_blank">
+                            <img th:src="@{/resources/img/social-instagram.svg}" alt="Логотип инстаграм">
+                        </a>
+                        <a class="social-link" href="https://www.ok.ru/alenakrot" target="_blank">
+                            <img th:src="@{/resources/img/social-odnoklassniki.png}" alt="Логотип одноклассники">
+                        </a>
+                        <a class="social-link" href="https://vk.com/alenakrot" target="_blank">
+                            <img th:src="@{/resources/img/social-vk.svg}" alt="Логотип вконтакте">
+                        </a>
+                    </div>
+                </div>
+                <div class="col text-center">
+                    <div class="footer-item footer-contacts">
+                        Наши контакты: <br>Velcom: <a href="tel:+375291898211">
+                        <img th:src="@{/resources/img/contact-viber.svg}" alt="Вайбер"><b>+375 29 189-82-11</b></a> - Алена<br>
+                        <a href="mailto:keepriseby@gmail.com"><b>keepriseby@gmail.com</b></a><br>
+                        <a th:href="@{/confidentiality}">Политика конфиденциальности</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <a th:if="${checkoutPage == null}" th:style="'display:' + ${productsCount > 0 ? 'block' : 'none'}" id="shopping-cart-btn" class="shopping-cart-block my-2 my-md-0"
+           data-placement="left" data-toggle="tooltip" th:title="${totalPrice + ' BYN'}" th:href="@{/order/checkout}">
+            <img class="shopping-cart-icon" th:src="@{/resources/img/shopping-cart-icon.png}" alt="Корзина заказов">
+            <span id="shopping-cart-product-count" class="shopping-cart-product-count-badge" th:text="${productsCount}"></span>
+        </a>
+    </footer>
+</body>
+</html>

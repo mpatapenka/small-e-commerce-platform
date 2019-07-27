@@ -2,12 +2,11 @@ plugins {
     id 'java'
     id 'org.springframework.boot'
     id 'io.spring.dependency-management'
-
-    id 'idea'
 }
 
-sourceCompatibility = JavaVersion.VERSION_11
-targetCompatibility = JavaVersion.VERSION_11
+archivesBaseName = 'inlove-app'
+
+sourceCompatibility = JavaVersion.VERSION_1_8
 
 repositories {
     mavenLocal()
@@ -15,42 +14,43 @@ repositories {
 }
 
 configurations {
-    developmentOnly
+    development
     runtimeClasspath {
-        extendsFrom developmentOnly
+        extendsFrom development
+    }
+    testImplementation {
+        exclude group: 'junit', module: 'junit'
     }
 }
 
 dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-hateoas'
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
     implementation group: 'org.slf4j', name: 'slf4j-api'
     implementation group: 'com.h2database', name: 'h2'
-    implementation group: 'io.springfox', name: 'springfox-swagger2', version: getProperty('springfox-swagger2.version')
-    implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: getProperty('springfox-swagger2.version')
+    implementation group: 'io.springfox', name: 'springfox-swagger2', version: property('springfox-swagger2.version')
+    implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: property('springfox-swagger2.version')
 
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: property('jupiter.version')
 
     compileOnly group: 'org.projectlombok', name: 'lombok'
 
     annotationProcessor group: 'org.projectlombok', name: 'lombok'
     annotationProcessor group: 'org.springframework.boot', name: 'spring-boot-configuration-processor'
 
-    developmentOnly group: 'org.springframework.boot', name: 'spring-boot-devtools'
+    development group: 'org.springframework.boot', name: 'spring-boot-devtools'
+}
+
+test {
+    useJUnitPlatform()
 }
 
 wrapper {
-    gradleVersion = '5.3.1'
+    gradleVersion = project.property('gradlew.version')
     distributionType = Wrapper.DistributionType.ALL
-}
-
-// Tell idea to output to build/classes/main instead of /out/
-idea {
-    module {
-        outputDir file('build/classes/main')
-        testOutputDir file('build/classes/test')
-    }
 }

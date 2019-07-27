@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml" lang="ru">
+<head>
+    <title>InLove - О нас</title>
+
+    <meta th:include="fragment/meta :: meta-info" th:remove="tag"/>
+
+    <link th:href="@{/resources/vendors/bootstrap/css/bootstrap.min.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{/resources/css/styles.css}" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <meta th:include="fragment/common-body-meta :: body-meta-info" th:remove="tag"/>
+
+    <header th:replace="fragment/header :: header(aboutUsPage = 'y')"></header>
+
+    <main role="main">
+        <div class="container-fluid main-content">
+            <div class="row">
+                <div class="col-lg-5 contact-info text-center">
+                    <h1>контактная информация</h1>
+                    <img class="rounded-circle" th:src="@{/resources/img/photo-alena.jpg}" alt="Фотография Алены">
+                    <a href="mailto:keepriseby@gmail.com">
+                        <img th:src="@{/resources/img/contact-mail.png}" alt="Электронная почта">
+                        keepriseby@gmail.com
+                    </a>
+                    <a href="tel:+375291898211">
+                        <img th:src="@{/resources/img/contact-phone.png}" alt="Телефон">
+                        <img th:src="@{/resources/img/contact-viber.svg}" alt="Вайбер">
+                        +375 29 189-82-11
+                    </a>
+                </div>
+
+                <div class="col-lg-7 faq">
+                    <h1 style="margin-bottom: 45px !important" class="text-center">часто задаваемые вопросы</h1>
+
+                    <div class="accordions">
+                        <div class="accordion-container">
+                            <div class="accordion d-flex flex-row align-items-center">
+                                1. Время работы интернет-магазина
+                            </div>
+                            <div class="accordion-panel">
+                                <p>С 10:00 до 19:00. Без выходных и праздничных дней.</p>
+                            </div>
+                        </div>
+
+                        <div class="accordion-container">
+                            <div class="accordion d-flex flex-row align-items-center">
+                                2. Почему люди выбирают InLove?
+                            </div>
+                            <div class="accordion-panel">
+                                <p>1. У нас самые привлекательные цены на нижнее белье, поскольку мы не имеем торговых точек, а следовательно наши затраты минимизированы.<br>
+                                    2. У нас действует программа лояльности. Мы очень любим наших клиентов и стараемся радовать их подарками.<br>
+                                    3. Наша продукция соответствует требованиям Технического регламента Таможенного союза "О безопасности продукции легкой промышленности" (ТР ТС 017/2011).<br>
+                                    4. Нам можно доверять, ведь мы заботимся о каждом нашем клиенте и переживаем чтобы после каждой покупки вы остались довольны.<br>
+                                    5. Мы экономим Ваше время, ведь заказ можно сделать за считанные минуты и все что вам нужно сделать после заказа это всего лишь дождаться извещения из ближайшего отделения почтовой связи в вашем городе.</p>
+                            </div>
+                        </div>
+
+                        <div class="accordion-container">
+                            <div class="accordion d-flex flex-row align-items-center">
+                                3. Сертифицирован ли товар?
+                            </div>
+                            <div class="accordion-panel">
+                                <p>Вся продукция соответствует требованиям Технического регламента Таможенного союза "О безопасности продукции легкой промышленности" (ТР ТС 017/2011).</p>
+                                <img class="img-thumbnail" th:src="@{/resources/img/sertif1.jpg}" alt="Сертификат магазина">
+                                <img class="img-thumbnail" th:src="@{/resources/img/sertif2.jpg}" alt="Сертификат магазина">
+                                <img class="img-thumbnail" th:src="@{/resources/img/sertif3.jpg}" alt="Сертификат магазина">
+                            </div>
+                        </div>
+
+                        <div class="accordion-container">
+                            <div class="accordion d-flex flex-row align-items-center">
+                                4. Можно ли вернуть товар?
+                            </div>
+                            <div class="accordion-panel">
+                                <p>Нет. Нижнее белье обмену и возврату НЕ ПОДЛЕЖИТ (Закон РБ «О защите прав потребителей» от 9 января 2002 г. № 90-З (Статья 28 абзац 3)).</p>
+                            </div>
+                        </div>
+
+                        <div class="accordion-container">
+                            <div class="accordion d-flex flex-row align-items-center">
+                                5. Какое качество нижнего белья?
+                            </div>
+                            <div class="accordion-panel">
+                                <p>Под каждой единицей товара мы указываем состав изделия, в этом покупатель может убедиться сам и выбрать себе подходящее нижнее белье. Кроме этого качество нижнего белья подтверждено сертификатами соответствия на каждую партию товара. Соответственно весь товар признан
+                                    безопасным в использовании. При отправке покупателю каждое изделие проверяется на наличие брака.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <footer th:replace="fragment/footer :: footer"></footer>
+    </main>
+
+    <script th:src="@{/resources/vendors/jquery/js/jquery-3.3.1.min.js}"></script>
+    <script th:src="@{/resources/vendors/bootstrap/js/popper.js}"></script>
+    <script th:src="@{/resources/vendors/bootstrap/js/bootstrap.min.js}"></script>
+    <script th:src="@{/resources/js/initialize.js}"></script>
+    <!-- Required for accordeons -->
+    <script th:src="@{/resources/js/contact_custom.js}"></script>
+</body>
+</html>

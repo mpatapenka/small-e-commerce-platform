@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml" lang="ru">
+<head></head>
+<body>
+    <header th:fragment="header">
+        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand d-flex align-items-center" th:href="@{/}">
+                    <img class="logo" th:src="@{/resources/img/logo.png}" alt="Логотип">
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+                        aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-md-center" id="navbarCollapse">
+                    <ul class="navbar-nav">
+                        <li th:class="${indexPage != null ? 'nav-item active' : 'nav-item'}">
+                            <a class="nav-link" th:href="@{/index}">главная
+                                <span th:if="${indexPage != null}" class="sr-only">(current)</span></a>
+                        </li>
+                        <li th:class="${payAndDeliveryPage != null ? 'nav-item active' : 'nav-item'}">
+                            <a class="nav-link" th:href="@{/pay-and-delivery}">оплата и доставка
+                                <span th:if="${payAndDeliveryPage != null}" class="sr-only">(current)</span></a>
+                        </li>
+                        <li th:class="${aboutUsPage != null ? 'nav-item active' : 'nav-item'}">
+                            <a class="nav-link" th:href="@{/about-us}">о нас
+                                <span th:if="${aboutUsPage != null}" class="sr-only">(current)</span></a>
+                        </li>
+                        <li th:class="${articlesPage != null ? 'nav-item active' : 'nav-item'}">
+                            <a class="nav-link" th:href="@{/articles}">статьи
+                                <span th:if="${articlesPage != null}" class="sr-only">(current)</span></a>
+                        </li>
+                        <li th:class="${feedbackPage != null ? 'nav-item active' : 'nav-item'}">
+                            <a class="nav-link" th:href="@{/feedback}">отзывы
+                                <span th:if="${feedbackPage != null}" class="sr-only">(current)</span></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+</body>
+</html>

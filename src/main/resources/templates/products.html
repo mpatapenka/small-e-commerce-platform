@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml" lang="ru">
+<head>
+    <title>InLove - Наши товары</title>
+
+    <meta th:include="fragment/meta :: meta-info" th:remove="tag"/>
+
+    <link th:href="@{/resources/vendors/bootstrap/css/bootstrap.min.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{/resources/css/styles.css}" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <meta th:include="fragment/common-body-meta :: body-meta-info" th:remove="tag"/>
+
+    <header th:replace="fragment/header :: header(productsPage = 'y')"></header>
+
+    <main role="main">
+        <div class="container-fluid main-content">
+            <div class="headers">
+                <h2>Доставляем женское счастье по всей Беларуси</h2>
+                <h1>Наши товары</h1>
+            </div>
+
+            <div class="filter-controls">
+                <div class="row">
+                    <div class="col">
+                        <div class="button-group">
+                            <button type="button" class="btn btn-outline-info dropdown-toggle w-100" data-toggle="dropdown">
+                                Размеры <span class="caret"></span>
+                            </button>
+                            <ul id="sizes-holder" class="dropdown-menu most-valuable">
+                                <li th:each="size : ${sizes}">
+                                    <a href="#" th:data-value="${size.value}" tabIndex="-1">
+                                        <input type="checkbox"/>&nbsp;<span th:text="${size.value}"></span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="btn-group btn-group-toggle w-100" data-toggle="buttons">
+                            <label class="btn btn-secondary active w-50">
+                                <input type="radio" name="options" id="priceAsc" autocomplete="off" checked> Самые дешевые
+                            </label>
+                            <label class="btn btn-secondary w-50">
+                                <input type="radio" name="options" id="priceDesc" autocomplete="off"> Самые дорогие
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <button id="filter-btn" type="button" class="btn btn-primary w-100">Применить</button>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="mb-4">
+
+            <div class="row products">
+                <div class="col-lg-4" th:each="product : ${products}">
+                    <a class="product-image-box" th:href="@{'/products/' + ${product.id}}">
+                        <div th:if="${product.salePrice != null}" class="sale-block">SALE</div>
+                        <img class="rounded img-thumbnail" th:if="${not #lists.isEmpty(product.images)}" th:src="@{'/images?path=' + ${product.images[0].path}}" alt="Изображение товара">
+                        <img class="rounded img-thumbnail" th:if="${#lists.isEmpty(product.images)}" th:src="@{/resources/img/img-not-found.png}" alt="Пустое изображение">
+                    </a>
+                    <h2>
+                        Цена:
+                        <span th:if="${product.salePrice == null}" th:text="${product.price}"></span>
+                        <span th:if="${product.salePrice != null}" style="text-decoration: line-through;" th:text="${product.price}"></span>
+                        <span th:if="${product.salePrice != null}" style="color: red;" th:text="${product.salePrice}"></span>
+                        BYN
+                    </h2>
+                    <p>
+                        Размеры: <span th:text="${T(com.keeprise.app.util.PojoProcessor).getSizes(product)}"></span>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <footer th:replace="fragment/footer :: footer"></footer>
+    </main>
+
+    <script th:src="@{/resources/vendors/jquery/js/jquery-3.3.1.min.js}"></script>
+    <script th:src="@{/resources/vendors/bootstrap/js/popper.js}"></script>
+    <script th:src="@{/resources/vendors/bootstrap/js/bootstrap.min.js}"></script>
+    <script th:src="@{/resources/js/general-scripts.js}"></script>
+    <script th:src="@{/resources/js/initialize.js}"></script>
+</body>
+</html>

@@ -2,9 +2,8 @@
 pluginManagement.resolutionStrategy.eachPlugin {
     String versionToApply = this.properties.get(it.requested.id.id + '.version')
     if (versionToApply != null) {
-        logger.info("Applying version '{}' to plugin '{}'.", versionToApply, it.requested.id.id)
         it.useVersion versionToApply
     }
 }
 
-rootProject.name = 'SECP'
+rootProject.name = 'inlove-shop-by'

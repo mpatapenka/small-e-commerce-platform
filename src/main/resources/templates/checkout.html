@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml" lang="ru">
+<head>
+    <title>InLove - Корзина</title>
+
+    <meta th:include="fragment/meta :: meta-info" th:remove="tag"/>
+
+    <link th:href="@{/resources/vendors/bootstrap/css/bootstrap.min.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{/resources/css/styles.css}" rel="stylesheet" type="text/css">
+    <style>
+        h3, h4, h5 {
+            font-size: 1.5rem;
+            margin-bottom: .5rem;
+            font-family: inherit;
+            font-weight: 600;
+            line-height: 1.2;
+            color: inherit;
+        }
+        .invalid-feedback {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <meta th:include="fragment/common-body-meta :: body-meta-info" th:remove="tag"/>
+
+    <header th:replace="fragment/header :: header(checkoutPage = 'y')"></header>
+
+    <main role="main">
+        <div class="container main-content">
+            <h1 class="text-center">Страница заказа</h1>
+
+            <div class="checkout-form-product" th:each="entry : ${products}" th:id="'product-entry-' + ${entry.key.key}">
+                <div class="row">
+                    <div class="col-2">
+                        <img th:if="${not #lists.isEmpty(entry.key.product.images)}" th:src="@{'/images?path=' + ${entry.key.product.images[0].path}}" class="product-img-sm" alt="Изображение товара">
+                        <img th:if="${#lists.isEmpty(entry.key.product.images)}" th:src="@{/resources/img/img-not-found.png}" class="product-img-sm" alt="Изображение товара">
+                    </div>
+                    <div class="col-5">
+                        <div class="checkout-form-content">
+                            <h6 th:text="${entry.key.product.name}"></h6>
+                            <p>
+                                Размеры: <span th:text="${T(com.keeprise.app.util.PojoProcessor).getSizes(entry.key)}"></span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-5">
+                        <div class="checkout-form-controls">
+                            <div class="row">
+                                <div class="col-sm">
+                                    <a class="align-items-center text-muted btn btn-sm" href="#" th:productid="${entry.key.key}" th:onclick="javascript:minusItem(this.getAttribute('productid'));">
+                                        <span data-feather="minus-circle"></span>
+                                    </a>
+                                </div>
+                                <div class="col-sm">
+                                    <span th:id="'product-count-' + ${entry.key.key}" th:text="${entry.value}"></span> штук
+                                </div>
+                                <div class="col-sm">
+                                    <a class="align-items-center text-muted btn btn-sm" href="#" th:productid="${entry.key.key}" th:onclick="javascript:plusItem(this.getAttribute('productid'));">
+                                        <span data-feather="plus-circle"></span>
+                                    </a>
+                                </div>
+                                <div class="col-sm">
+                                    Цена:
+                                    <span th:id="'product-price-' + ${entry.key.key}" th:if="${entry.key.product.salePrice == null}" th:text="${entry.key.product.price}"></span>
+                                    <span th:id="'product-price-' + ${entry.key.key}" th:if="${entry.key.product.salePrice != null}" th:text="${entry.key.product.salePrice}"></span>
+                                    BYN
+                                </div>
+                                <div class="col-sm">
+                                    <a class="align-items-center text-muted btn btn-sm" href="#" th:productid="${entry.key.key}" th:onclick="javascript:removeItem(this.getAttribute('productid'));">
+                                        <span data-feather="trash"></span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h5>Стоимость товаров: <span id="overall-product-price" th:text="${totalPrice}"></span> BYN</h5>
+            <h6 style="color: red">Минимальная сумма заказа 10 BYN</h6>
+            <h6>Доставка по почте наложенным платежом +<span id="deliveryCodPrice" th:text="${deliveryCodPrice}"></span> BYN</h6>
+            <h5>Общая стоимость: <span id="overall-price" th:text="${totalPrice > 0 ? totalPrice + deliveryCodPrice : totalPrice}"></span> BYN</h5>
+            <br>
+
+            <h4 class="mb-3">Введите данные для совершения заказа</h4>
+            <form method="post" th:action="@{/order}" class="needs-validation" novalidate>
+                <div class="mb-3" >
+                    <label for="firstName">ФИО (полностью):</label>
+                    <input type="text" class="form-control" id="firstName" name="credentials" placeholder="" th:value="${customerInfo.credentials}" required>
+                    <p class="invalid-feedback" th:if="${#fields.hasErrors('customerInfo.credentials')}" th:errors="*{customerInfo.credentials}">NAME ERROR</p>
+                </div>
+
+                <div class="mb-3" >
+                    <label for="email">Email <span class="text-muted">(Не обязательно)</span>:</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="you@example.com" th:value="${customerInfo.email}">
+                    <p class="invalid-feedback" th:if="${#fields.hasErrors('customerInfo.email')}" th:errors="*{customerInfo.email}">NAME ERROR</p>
+                </div>
+
+                <div class="mb-3">
+                    <label for="phoneNumber">Номер телефона: </label>
+                    <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" th:value="${customerInfo.phoneNumber}" required>
+                    <p class="invalid-feedback" th:if="${#fields.hasErrors('customerInfo.phoneNumber')}" th:errors="*{customerInfo.phoneNumber}">NAME ERROR</p>
+                </div>
+
+                <div class="mb-3">
+                    <label for="zipCode">Почтовый индекс: </label>
+                    <input type="text" class="form-control" id="zipCode" name="zipCode" th:value="${customerInfo.zipCode}" required>
+                    <p class="invalid-feedback" th:if="${#fields.hasErrors('customerInfo.zipCode')}" th:errors="*{customerInfo.zipCode}">NAME ERROR</p>
+                </div>
+
+                <div class="mb-3">
+                    <label for="region">Область: </label>
+                    <input type="text" class="form-control" id="region" name="region" th:value="${customerInfo.region}" required>
+                    <p class="invalid-feedback" th:if="${#fields.hasErrors('customerInfo.region')}" th:errors="*{customerInfo.region}">NAME ERROR</p>
+                </div>
+
+                <div class="mb-3">
+                    <label for="area">Район: </label>
+                    <input type="text" class="form-control" id="area" name="area" th:value="${customerInfo.area}" required>
+                    <p class="invalid-feedback" th:if="${#fields.hasErrors('customerInfo.area')}" th:errors="*{customerInfo.area}">NAME ERROR</p>
+                </div>
+
+                <div class="mb-3">
+                    <label for="city">Город/Агрогородок/Поселок: </label>
+                    <input type="text" class="form-control" id="city" name="city" th:value="${customerInfo.city}" required>
+                    <p class="invalid-feedback" th:if="${#fields.hasErrors('customerInfo.city')}" th:errors="*{customerInfo.city}">NAME ERROR</p>
+                </div>
+
+                <div class="mb-3">
+                    <label for="street">Улица: </label>
+                    <input type="text" class="form-control" id="street" name="street" th:value="${customerInfo.street}" required>
+                    <p class="invalid-feedback" th:if="${#fields.hasErrors('customerInfo.street')}" th:errors="*{customerInfo.street}">NAME ERROR</p>
+                </div>
+
+                <div class="mb-3">
+                    <label for="houseNumber">Номер дома: </label>
+                    <input type="text" class="form-control" id="houseNumber" name="houseNumber" th:value="${customerInfo.houseNumber}" required>
+                    <p class="invalid-feedback" th:if="${#fields.hasErrors('customerInfo.houseNumber')}" th:errors="*{customerInfo.houseNumber}">NAME ERROR</p>
+                </div>
+
+                <div class="mb-3">
+                    <label for="apartmentsNumber">Квартира: </label>
+                    <input type="text" class="form-control" id="apartmentsNumber" name="apartmentsNumber" th:value="${customerInfo.apartmentsNumber}" required>
+                    <p class="invalid-feedback" th:if="${#fields.hasErrors('customerInfo.apartmentsNumber')}" th:errors="*{customerInfo.apartmentsNumber}">NAME ERROR</p>
+                </div>
+
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" onchange="updateConfidentialityState()" class="custom-control-input" id="confidentiality">
+                    <label class="custom-control-label" for="confidentiality"><a th:href="@{/confidentiality}" target="_blank">Ознакомплен/а с политикой конфиденциальности</a></label>
+                </div>
+
+                <hr class="mb-4">
+
+                <button id="main-form-submit-btn"  class="btn btn-primary btn-lg btn-block" type="submit">Заказать</button>
+            </form>
+        </div>
+
+        <footer th:replace="fragment/footer :: footer(checkoutPage = 'y')"></footer>
+    </main>
+
+    <script th:src="@{/resources/vendors/jquery/js/jquery-3.3.1.min.js}"></script>
+    <script th:src="@{/resources/vendors/bootstrap/js/popper.js}"></script>
+    <script th:src="@{/resources/vendors/bootstrap/js/bootstrap.min.js}"></script>
+    <script th:src="@{/resources/vendors/feather-icons/js/feather.min.js}"></script>
+    <script th:src="@{/resources/js/general-scripts.js}"></script>
+    <script th:src="@{/resources/js/initialize.js}"></script>
+
+    <script>
+        $('#main-form-submit-btn').prop('disabled', true);
+        feather.replace();
+    </script>
+</body>
+</html>

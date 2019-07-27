@@ -1,11 +1,9 @@
 spring:
   datasource:
-    url: jdbc:h2:./database/dev.db
+    url: jdbc:h2:./database/dev
     username: root
     password: password
-    driver-class-name: org.h2.Driver
-    hikari:
-      maximum-pool-size: 3
+#    driver-class-name: org.h2.Driver
   jpa:
     hibernate:
       ddl-auto: update
@@ -14,39 +12,3 @@ spring:
         show_sql: true
         use_sql: true
         format_sql: true
-  thymeleaf:
-    cache: false
-  mvc:
-    static-path-pattern: /resources/**
-  messages:
-    basename: languages/messages
-  security:
-    user:
-      name: admin
-      password: admin
-      roles: ADMIN
-  servlet:
-    multipart:
-      max-file-size: 7MB
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: nonreply.keepriseby@gmail.com
-    password: keepriseby
-    properties:
-      mail.smtp.auth: true
-      mail.smtp.starttls.enable: true
-      mail.transport.protocol: smtp
-      mail.debug: true
-
-logging:
-  file: logs/keepriseapp.log
-  level:
-    org.springframework.web: WARN
-    org.hibernate: WARN
-    org.hibernate.SQL: DEBUG
-    com.keeprise.app: DEBUG
-    org.springframework.transaction.interceptor: TRACE
-    # Enable logging for HikariCP to verify that it is used
-    com.zaxxer.hikari.HikariConfig: DEBUG
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE

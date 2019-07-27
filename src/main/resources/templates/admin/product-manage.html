@@ -1,0 +1,157 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" th:href="@{/resources/favicon.ico}">
+
+    <title th:text="#{admin.product.manage.title}">TITLE</title>
+
+    <link th:href="@{/resources/vendors/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+</head>
+
+<body>
+<nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
+    <a class="navbar-brand col-sm-3 col-md-2 mr-0" th:href="@{/admin/dashboard}" th:text="#{admin.product.manage.title}">COMPANY NAME</a>
+    <ul class="navbar-nav px-3">
+        <li class="nav-item text-nowrap">
+            <a class="nav-link" th:href="@{/j_spring_security_logout}" th:text="#{admin.dashboard.signout}">SIGN OUT</a>
+        </li>
+    </ul>
+</nav>
+
+<div class="container">
+    <div class="py-5 text-center">
+        <h2 th:text="#{admin.product.manage.form.title}">PRODUCT EDIT FORM</h2>
+    </div>
+
+    <div class="row justify-content-md-center">
+        <div class="col">
+            <form enctype="multipart/form-data" method="post" th:action="@{/admin/product/manage}">
+                <input type="hidden" name="id" th:value="${productDto.id}">
+                <div class="mb-3">
+                    <label for="productName"><b>Наименование</b></label>
+                    <input type="text" class="form-control" id="productName" name="name" placeholder="" th:value="${productDto.name}">
+                    <p style="color: red" th:if="${#fields.hasErrors('productDto.name')}" th:errors="*{productDto.name}">NAME ERROR</p>
+                </div>
+
+                <div class="mb-3">
+                    <label for="productDescription"><b>Описание</b></label>
+                    <input type="text" class="form-control" id="productDescription" name="description" placeholder="" th:value="${productDto.description}">
+                    <p style="color: red" th:if="${#fields.hasErrors('productDto.description')}" th:errors="*{productDto.description}">DESCRIPTION ERROR</p>
+                </div>
+
+                <div class="mb-3">
+                    <label for="productFabricator"><b>Производитель</b></label>
+                    <input type="text" class="form-control" id="productFabricator" name="fabricator" placeholder="" th:value="${productDto.fabricator}">
+                    <p style="color: red" th:if="${#fields.hasErrors('productDto.fabricator')}" th:errors="*{productDto.fabricator}">FABRICATOR ERROR</p>
+                </div>
+
+                <div class="mb-3">
+                    <label for="productBrandName"><b>Брэнд</b></label>
+                    <input type="text" class="form-control" id="productBrandName" name="brandName" placeholder="" th:value="${productDto.brandName}">
+                    <p style="color: red" th:if="${#fields.hasErrors('productDto.brandName')}" th:errors="*{productDto.brandName}">BRAND NAME ERROR</p>
+                </div>
+
+                <div class="mb-3">
+                    <label for="productComposition"><b>Состав</b></label>
+                    <input type="text" class="form-control" id="productComposition" name="composition" placeholder="" th:value="${productDto.composition}">
+                    <p style="color: red" th:if="${#fields.hasErrors('productDto.composition')}" th:errors="*{productDto.composition}">COMPOSITION ERROR</p>
+                </div>
+
+                <div class="mb-3">
+                    <label for="productPrice"><b>Стоимость, BYN</b></label>
+                    <input type="text" class="form-control" id="productPrice" name="price" placeholder="" th:value="${productDto.price}">
+                    <p style="color: red" th:if="${#fields.hasErrors('productDto.price')}" th:errors="*{productDto.price}">PRICE ERROR</p>
+                </div>
+
+                <div class="mb-3">
+                    <label for="productSalePrice"><b>Стоимость со скидкой, BYN</b></label>
+                    <input type="text" class="form-control" id="productSalePrice" name="salePrice" placeholder="" th:value="${productDto.salePrice}">
+                    <p style="color: red" th:if="${#fields.hasErrors('productDto.salePrice')}" th:errors="*{productDto.salePrice}">PRICE ERROR</p>
+                </div>
+
+                <div class="mb-3">
+                    <label for="productCategoryId"><b>Категория</b></label>
+                    <select id="productCategoryId" class="form-control" name="categoryId">
+                        <option value="" selected>Выберите...</option>
+                        <option th:each="category : ${categories}" th:value="${category.id}"
+                                th:text="${category.name}"
+                                th:selected="${category.id == productDto.categoryId}"></option>
+                    </select>
+                    <p style="color: red" th:if="${#fields.hasErrors('productDto.categoryId')}" th:errors="*{productDto.categoryId}">CATEGORYID ERROR</p>
+                </div>
+
+                <div class="mb-3">
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <a class="align-items-center text-muted btn" id="add-sizes-btn">
+                            Добавить размеры <span data-feather="plus-circle"></span>
+                        </a>
+                    </div>
+                    <div id="productItemArea">
+                        <div class="form-row" th:each="productItemDto, stat : ${productDto.productItemDtos}">
+                            <div>
+                                <input type="hidden" th:field="*{productDto.productItemDtos[__${stat.index}__].id}" th:value="${productItemDto.id}"/>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>Наименование</label>
+                                <input type="text" class="form-control" th:field="*{productDto.productItemDtos[__${stat.index}__].name}" placeholder="" th:value="${productItemDto.name}">
+                            </div>
+                            <div class="form-group col-md-7">
+                                <label>Размеры</label>
+                                <input type="text" class="form-control" th:field="*{productDto.productItemDtos[__${stat.index}__].sizes}" th:value="${productItemDto.sizes}">
+                            </div>
+                            <div class="form-group col-md-1">
+                                <a class="align-items-center text-muted btn remove-size-btn">
+                                    <span data-feather="minus-circle"></span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <input type="checkbox" class="form-check-input" id="productIsArchived" name="archived" placeholder="" th:checked="${productDto.archived}">
+                    <label class="form-check-label" for="productIsArchived"><b>Архивный</b></label>
+                </div>
+
+                <div class="mb-3">
+                    <label for="productImages">Изображения</label>
+                    <input type="file" class="form-control-file" id="productImages" name="images" accept="image/x-png,image/gif,image/jpeg" multiple="multiple">
+                </div>
+
+                <div class="mb-3">
+                    <input type="checkbox" class="form-check-input" id="productReplaceImages" name="replaceImages" placeholder="" th:checked="${productDto.replaceImages}">
+                    <label class="form-check-label" for="productIsArchived"><b>Перезаписать изображения товаров</b></label>
+                </div>
+
+                <div class="mb-3" th:if="${not #lists.isEmpty(productDto.imagesPaths)}">
+                    <b>Загруженные изображения</b>
+                    <p th:each="path : ${productDto.imagesPaths}">
+                        <a th:href="@{'/images?path=' + ${path}}" th:text="${path}">PATH</a>
+                    </p>
+                </div>
+
+                <hr class="mb-4">
+
+                <button class="btn btn-primary btn-block" type="submit">Сохранить</button>
+                <a class="btn btn-danger btn-block" th:href="@{/admin/dashboard}">Закрыть</a>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script th:src="@{/resources/vendors/jquery/js/jquery-3.3.1.min.js}"></script>
+<script th:src="@{/resources/vendors/bootstrap/js/bootstrap.min.js}"></script>
+
+<!-- Icons -->
+<script th:src="@{/resources/vendors/feather-icons/js/feather.min.js}"></script>
+<script>
+    feather.replace();
+</script>
+
+<script th:src="@{/resources/js/product-manage.js}"></script>
+
+</body>
+</html>

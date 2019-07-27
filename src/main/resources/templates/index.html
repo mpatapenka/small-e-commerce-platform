@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml" lang="ru">
+<head>
+    <title>InLove - Магазин нижнего белья</title>
+
+    <meta th:include="fragment/meta :: meta-info" th:remove="tag"/>
+
+    <link th:href="@{/resources/vendors/bootstrap/css/bootstrap.min.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{/resources/css/styles.css}" rel="stylesheet" type="text/css">
+
+    <style>
+        .main-content {
+            margin-top: 25px;
+        }
+    </style>
+</head>
+<body>
+    <meta th:include="fragment/common-body-meta :: body-meta-info" th:remove="tag"/>
+
+    <header th:replace="fragment/header :: header(indexPage = 'y')"></header>
+
+    <main role="main">
+        <div class="main-image">
+            <img th:src="@{/resources/img/index-header-image.jpg}" alt="Главное изображение сайта">
+        </div>
+
+        <div class="container-fluid main-content">
+            <div class="headers">
+                <h1>Наши товары</h1>
+            </div>
+
+            <div class="row categories">
+                <div class="col-lg category-item" th:each="category : ${categories}">
+                    <a th:href="@{'/products?category_id=' + ${category.id}}">
+                        <img class="rounded-circle img-thumbnail" th:if="${category.image != null}" th:src="@{'/images?path=' + ${category.image.path}}" alt="Изображение категории">
+                        <img class="rounded-circle img-thumbnail" th:if="${category.image == null}" th:src="@{/resources/img/img-not-found.png}" alt="Изображение категории">
+                    </a>
+                    <h2><a class="text-link" th:href="@{'/products?category_id=' + ${category.id}}" th:text="${category.name}" role="button"></a></h2>
+                </div>
+            </div>
+
+            <div class="headers">
+                <h1>Хорошие предложения от InLove</h1>
+                <h2>Самые выгодные покупки здесь</h2>
+            </div>
+
+            <div class="row special-offers">
+                <div class="col-lg-4">
+                    <a th:href="@{/products/sales}">
+                        <img class="rounded-circle img-thumbnail" th:src="@{/resources/img/index-sales.jpg}" alt="Скидки">
+                    </a>
+                    <h2><a class="text-link" th:href="@{/products/sales}" role="button">Распродажа остатков</a></h2>
+                </div>
+                <div class="col-lg-4">
+                    <a th:href="@{/loyalty}">
+                        <img class="rounded-circle img-thumbnail" th:src="@{/resources/img/index-loyalty.jpg}" alt="Программа лоялности">
+                    </a>
+                    <h2><a class="text-link" th:href="@{/loyalty}" role="button">Программа лояльности</a></h2>
+                </div>
+                <div class="col-lg-4">
+                    <a th:href="@{/certificates}">
+                        <img class="rounded-circle img-thumbnail" th:src="@{/resources/img/index-certificate.jpg}" alt="Подарочные сертификаты">
+                    </a>
+                    <h2><a class="text-link" th:href="@{/certificates}" role="button">Подарочные сертификаты онлайн</a></h2>
+                </div>
+            </div>
+
+            <div class="headers">
+                <h1>Наш инстаграм</h1>
+            </div>
+
+            <div class="row instafeed"><!-- Is populated via js --></div>
+        </div>
+
+        <footer th:replace="fragment/footer :: footer"></footer>
+    </main>
+
+    <div class="modal fade" id="orderSuccessModal" tabindex="-1" role="alert" aria-labelledby="orderSuccessModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="orderSuccessModalTitle">Статус заказа</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p th:if="${orderStatus == 'success'}">
+                        Ваш заказ был успешно зарегистрирован. В ближайшее время с Вами свяжется менеджер для уточнения необходимых данных.<br>
+                        Спасибо что выбрали нас ;)
+                    </p>
+                    <p th:if="${orderStatus == 'fail'}">
+                        В ходе регистрации заказа произошла ошибка. Также вы можете узнать по телефону +375 (29) 189-82-11 попал ли ваш заказ в очередь или нет.<br>
+                        Приносим свои извинения за неудобства.
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button th:if="${orderStatus == 'success'}" type="button" class="btn btn-success" data-dismiss="modal">Подтвердить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script th:src="@{/resources/vendors/jquery/js/jquery-3.3.1.min.js}"></script>
+    <script th:src="@{/resources/vendors/bootstrap/js/popper.js}"></script>
+    <script th:src="@{/resources/vendors/bootstrap/js/bootstrap.min.js}"></script>
+    <script th:src="@{/resources/js/initialize.js}"></script>
+    <script th:inline="javascript">
+        var photosCountToLoad = 5;
+        var photoPrefixPattern = '<div class="col-lg insta-item"><a target="_blank" href="';
+        var photoSuffixPattern = '"><img class="rounded" alt="Фото из инстаграмм" src="';
+        var photoPostfixPattern = '"><\/a><\/div>';
+        var username = 'inlove_by';
+
+        $.get('https://www.instagram.com/' + username, function (data) {
+            var sharedDataStart = '<script type=\"text/javascript\">window._sharedData = ';
+            var sharedDataEnd = ';<\/script>';
+
+            var startPosition = data.indexOf(sharedDataStart);
+            if (startPosition > 0) {
+                startPosition += sharedDataStart.length;
+                var endPosition = data.indexOf(sharedDataEnd, startPosition);
+                var stringSharedData = data.substring(startPosition, endPosition);
+
+                var instafeed = $('.instafeed');
+
+                var photosLoaded = 0;
+                var sharedData = JSON.parse(stringSharedData);
+                var edges = sharedData.entry_data.ProfilePage[0].graphql.user.edge_owner_to_timeline_media.edges;
+                for (var i = 0; i < edges.length && photosLoaded < photosCountToLoad; i++) {
+                    var node = edges[i].node;
+                    if (node.is_video === false) {
+                        var postUrl = 'https://www.instagram.com/p/' + node.shortcode + '/';
+                        var imageUrl = node.thumbnail_src;
+                        var instagramImage = photoPrefixPattern + postUrl + photoSuffixPattern + imageUrl + photoPostfixPattern;
+
+                        instafeed.append(instagramImage);
+
+                        photosLoaded++;
+                    }
+                }
+            }
+        });
+
+        var orderStatus = /*[[${orderStatus}]]*/ "";
+        if (orderStatus !== null) {
+            $('#orderSuccessModal').modal();
+        }
+    </script>
+</body>
+</html>
