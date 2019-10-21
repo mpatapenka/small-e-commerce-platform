@@ -6,4 +6,4 @@ pluginManagement.resolutionStrategy.eachPlugin {
     }
 }
 
-rootProject.name = 'inlove-shop-by'
+rootProject.name = 'underwear-shop-by'

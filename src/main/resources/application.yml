@@ -1,15 +1,15 @@
-in-love:
+underwear-shop:
   confirmation-emails:
     - maksim.patapenka@gmail.com
   delivery-prices:
     cash-on-delivery: 3 # BYN
   image-storage-location: ./images
   meta-info:
-    title: InLove-Shop REST API
-    description: Provides REST API to interact with InLove-Shop web application
+    title: Underwear-Shop REST API
+    description: Provides REST API to interact with Underwear-Shop web application
     version: 1.0.0
     contacts:
-      app-name: InLove-Shop
+      app-name: Underwear-Shop
 
 spring:
   profiles:
@@ -19,8 +19,6 @@ spring:
       maximum-pool-size: 3
   servlet.multipart:
     max-file-size: 7MB
-  thymeleaf:
-    cache: false
   mvc:
     static-path-pattern: /resources/**
   messages:
